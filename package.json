@@ -1,0 +1,33 @@
+{
+  "name": "async-promise-wrapper",
+  "version": "1.0.0",
+  "description": "Leverage the caolan/async library to coordinate promise control flow.",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Antimatter/async-promise-wrapper.git"
+  },
+  "keywords": [
+    "async",
+    "promise"
+  ],
+  "author": "Jim Baldwin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Antimatter/async-promise-wrapper/issues"
+  },
+  "homepage": "https://github.com/Antimatter/async-promise-wrapper#readme",
+  "dependencies": {
+    "async": "^2.6.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "mocha": "^5.1.1"
+  }
+}
