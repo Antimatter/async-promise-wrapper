@@ -1,6 +1,6 @@
 {
   "name": "async-promise-wrapper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Leverage the caolan/async library to coordinate promise control flow.",
   "main": "index.js",
   "directories": {
