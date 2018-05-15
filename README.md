@@ -1,5 +1,5 @@
 # async-promise-wrapper
-
+[![CircleCI](https://circleci.com/gh/Antimatter/async-promise-wrapper/tree/master.svg?style=svg)](https://circleci.com/gh/Antimatter/async-promise-wrapper/tree/master)
 ## Async libraries wrapped to use promises
 
 Maps most of the functions in caolan/async to work with functions that return promises instead of iteratees and callbacks.  Iplemented as a simple wrapper that works for most of those methods with very little code.
