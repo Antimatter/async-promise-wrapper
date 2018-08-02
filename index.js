@@ -65,6 +65,27 @@ function Async3(fn) {
     };
 }
 
+function Async4(fn) {
+    return function(arg1, pf) {
+        return new Promise(function(resolve, reject) {
+            async[fn](
+                arg1,
+                function(item1, item2, callback) {
+                    pf(item1, item2)
+                        .then(function(value) {
+                            callback(null, value);
+                        })
+                        .catch(callback);
+                },
+                function(error, results) {
+                    if (error) reject(error);
+                    else resolve(results);
+                }
+            );
+        });
+    };
+}
+
 [
     'concat',
     'concatSeries',
@@ -109,6 +130,14 @@ function Async3(fn) {
 ['reduce', 'reduceRight'].forEach(function(name) {
     module.exports[name] = Async3(name);
 });
+
+[
+    'mapValues',
+    'mapValuesSeries'
+].forEach(function(name) {
+    module.exports[name] = Async4(name);
+});
+
 
 module.exports.doWhilst = function(pf, tf) {
     return new Promise(function(resolve, reject) {
