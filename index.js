@@ -1,18 +1,19 @@
 const async = require('async');
 
-function Async1(fn) {
-    return function(arg1, pf) {
-        return new Promise(function(resolve, reject) {
+// for functions that take one argument and call iteratee with one argument
+function Async11(fn) {
+    return function (arg1, pf) {
+        return new Promise(function (resolve, reject) {
             async[fn](
                 arg1,
-                function(item, callback) {
+                function (item, callback) {
                     pf(item)
-                        .then(function(value) {
+                        .then(function (value) {
                             callback(null, value);
                         })
                         .catch(callback);
                 },
-                function(error, results) {
+                function (error, results) {
                     if (error) reject(error);
                     else resolve(results);
                 }
@@ -21,20 +22,21 @@ function Async1(fn) {
     };
 }
 
-function Async2(fn) {
-    return function(arg1, arg2, pf) {
-        return new Promise(function(resolve, reject) {
+// for functions that take two arguments and call iteratee with one argument
+function Async21(fn) {
+    return function (arg1, arg2, pf) {
+        return new Promise(function (resolve, reject) {
             async[fn](
                 arg1,
                 arg2,
-                function(item, callback) {
+                function (item, callback) {
                     pf(item)
-                        .then(function(value) {
+                        .then(function (value) {
                             callback(null, value);
                         })
                         .catch(callback);
                 },
-                function(error, results) {
+                function (error, results) {
                     if (error) reject(error);
                     else resolve(results);
                 }
@@ -43,20 +45,21 @@ function Async2(fn) {
     };
 }
 
-function Async3(fn) {
-    return function(arg1, arg2, pf) {
-        return new Promise(function(resolve, reject) {
+// for functions that take two arguments and call iteratee with two arguments
+function Async22(fn) {
+    return function (arg1, arg2, pf) {
+        return new Promise(function (resolve, reject) {
             async[fn](
                 arg1,
                 arg2,
-                function(item1, item2, callback) {
+                function (item1, item2, callback) {
                     pf(item1, item2)
-                        .then(function(value) {
+                        .then(function (value) {
                             callback(null, value);
                         })
                         .catch(callback);
                 },
-                function(error, results) {
+                function (error, results) {
                     if (error) reject(error);
                     else resolve(results);
                 }
@@ -65,19 +68,20 @@ function Async3(fn) {
     };
 }
 
-function Async4(fn) {
-    return function(arg1, pf) {
-        return new Promise(function(resolve, reject) {
+// for functions that take one argument and call iteratee with two arguments
+function Async12(fn) {
+    return function (arg1, pf) {
+        return new Promise(function (resolve, reject) {
             async[fn](
                 arg1,
-                function(item1, item2, callback) {
+                function (item1, item2, callback) {
                     pf(item1, item2)
-                        .then(function(value) {
+                        .then(function (value) {
                             callback(null, value);
                         })
                         .catch(callback);
                 },
-                function(error, results) {
+                function (error, results) {
                     if (error) reject(error);
                     else resolve(results);
                 }
@@ -93,12 +97,12 @@ function Async4(fn) {
     'detectSeries',
     'each',
     'eachSeries',
-    'eachOf',
-    'eachOfSeries',
     'every',
     'everySeries',
     'filter',
     'filterSeries',
+    'groupBy',
+    'groupBySeries',
     'map',
     'mapSeries',
     'mapValues',
@@ -108,46 +112,48 @@ function Async4(fn) {
     'some',
     'someSeries',
     'sortBy'
-].forEach(function(name) {
-    module.exports[name] = Async1(name);
+].forEach(function (name) {
+    module.exports[name] = Async11(name);
 });
 
 [
     'detectLimit',
     'eachLimit',
-    'eachOfLimit',
     'everyLimit',
     'filterLimit',
+    'groupByLimit',
     'mapLimit',
     'mapValuesLimit',
     'rejectLimit',
     'someLimit',
     'transform'
-].forEach(function(name) {
-    module.exports[name] = Async2(name);
+].forEach(function (name) {
+    module.exports[name] = Async21(name);
 });
 
-['reduce', 'reduceRight'].forEach(function(name) {
-    module.exports[name] = Async3(name);
+['eachOfLimit', 'reduce', 'reduceRight'].forEach(function (name) {
+    module.exports[name] = Async22(name);
 });
 
 [
+    'eachOf',
+    'eachOfSeries',
     'mapValues',
     'mapValuesSeries'
-].forEach(function(name) {
-    module.exports[name] = Async4(name);
+].forEach(function (name) {
+    module.exports[name] = Async12(name);
 });
 
 
-module.exports.doWhilst = function(pf, tf) {
-    return new Promise(function(resolve, reject) {
+module.exports.doWhilst = function (pf, tf) {
+    return new Promise(function (resolve, reject) {
         async.doWhilst(
-            function(callback) {
+            function (callback) {
                 pf()
-                    .then(function(msg) {
+                    .then(function (msg) {
                         callback(null, msg);
                     })
-                    .catch(function(err) {
+                    .catch(function (err) {
                         callback(err);
                     });
             },
@@ -163,8 +169,8 @@ module.exports.doWhilst = function(pf, tf) {
     });
 };
 
-module.exports.whilst = function(tf, pf) {
-    return new Promise(function(resolve, reject) {
+module.exports.whilst = function (tf, pf) {
+    return new Promise(function (resolve, reject) {
         async.whilst(
             tf,
             callback => {
@@ -187,29 +193,29 @@ module.exports.whilst = function(tf, pf) {
     });
 };
 
-module.exports.delay = function(t, r) {
+module.exports.delay = function (t, r) {
     return new Promise(resolve => {
         setTimeout(resolve, t);
-    }).then(function() {
+    }).then(function () {
         return Promise.resolve(r);
     });
 };
 
-module.exports.retry = function(opts, pf) {
-    return new Promise(function(resolve, reject) {
+module.exports.retry = function (opts, pf) {
+    return new Promise(function (resolve, reject) {
         async.retry(
             opts,
-            function(callback) {
+            function (callback) {
                 pf()
-                    .then(function(msg) {
+                    .then(function (msg) {
                         callback(null, msg);
                     })
-                    .catch(function(err) {
+                    .catch(function (err) {
                         callback(err);
                     });
             },
 
-            function(error, result) {
+            function (error, result) {
                 if (error) {
                     reject(error);
                 } else {
@@ -220,26 +226,26 @@ module.exports.retry = function(opts, pf) {
     });
 };
 
-module.exports.retryForever = function(interval, pf) {
-    return new Promise(function(resolve) {
+module.exports.retryForever = function (interval, pf) {
+    return new Promise(function (resolve) {
         var result = null;
         var done = false;
         async.whilst(
-            function() {
+            function () {
                 return !done;
             },
-            function(callback) {
+            function (callback) {
                 pf()
-                    .then(function(r) {
+                    .then(function (r) {
                         result = r;
                         done = true;
                         callback();
                     })
-                    .catch(function() {
+                    .catch(function () {
                         setTimeout(callback, interval);
                     });
             },
-            function() {
+            function () {
                 resolve(result);
             }
         );

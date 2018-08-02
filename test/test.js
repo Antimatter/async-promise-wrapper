@@ -73,6 +73,38 @@ describe('eachSeries', function() {
     });
 });
 
+describe('eachOfSeries', function() {
+    it('should iterate over an array and execute a promise on each element', function(done) {
+        var values = 0;
+        let keys = '';
+        ap.eachOfSeries({one: 1, two:2, three:3}, (v, k) => {
+            values += v;
+            keys += k;
+            return Promise.resolve();
+        })
+        .then(function(result) {
+            assert.ok(values === 6 && keys === 'onetwothree');
+            done();
+        })
+        .catch(function(error) {
+            assert.fail('fail');
+            done();
+        });
+    });
+    it('should fail if any promise is rejected', function(done) {
+        ap.eachOfSeries({one: 1, two:2, three:3}, function(x) {
+            return Promise.reject('rejection');
+        })
+        .then(function(result) {
+            assert.fail(result);
+            done();
+        })
+        .catch(function(error) {
+            done();
+        });
+    });
+});
+
 describe('mapValues', function() {
     it('should iterate over an object and execute a promise on each element', function(done) {
         ap.mapValues({one: 1, two:2, three:3}, function(v, k) {
@@ -100,3 +132,4 @@ describe('mapValues', function() {
         });
     });
 });
+
