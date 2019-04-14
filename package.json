@@ -24,10 +24,10 @@
   },
   "homepage": "https://github.com/Antimatter/async-promise-wrapper#readme",
   "dependencies": {
-    "async": "^2.6.0"
+    "async": "^2.6.2"
   },
   "devDependencies": {
-    "eslint": "^4.19.1",
-    "mocha": "^5.1.1"
+    "eslint": "^5.16.0",
+    "mocha": "^5.2.0"
   }
 }
